@@ -1,0 +1,14 @@
+{
+  "name": "proxy-api-service",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "API proxy para consultar preços de criptomoedas via CoinGecko",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  }
+}
