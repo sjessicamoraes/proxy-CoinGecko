@@ -12,23 +12,27 @@ router.get('/:coin', async (req, res) => {
     const cached = cache.get(coin);
     const now = Date.now();
 
-    if(cached && now - cached.timestamp < 60000) {
+    if (cached && now - cached.timestamp < 60000) {
       console.log('⚡ Retornando do cache');
 
       history.push({
-      coin,
-      price_usd: cached.price_usd,
-      timestamp: new Date().toISOString(),
-      cached: true
-    });
+       coin,
+        price_usd: cached.price_usd,
+        timestamp: new Date().toISOString(),
+        cached: true
+      });
 
-    console.log(history);
+      if (history.length > 50) {
+        history.shift();
+      }
 
-    return res.json({
-      coin,
-      price_usd: cached.price_usd,
-      cached: true
-    });
+      console.log(history);
+
+      return res.json({
+        coin,
+        price_usd: cached.price_usd,
+        cached: true
+      });
     }
 
     const response = await fetch(
@@ -48,13 +52,11 @@ router.get('/:coin', async (req, res) => {
     const price = data[coin].usd;
     const timestamp = new Date().toISOString();
 
-    // Salva no cache
     cache.set(coin, {
       price_usd: price,
       timestamp: now
     });
 
-    // Registra no histórico
     history.push({
       coin,
       price_usd: price,
@@ -62,13 +64,17 @@ router.get('/:coin', async (req, res) => {
       cached: false
     });
 
+    if (history.length > 50) {
+      history.shift();
+    }
+
     return res.json({
       coin,
       price_usd: price,
       cached: false
     });
 
-  
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Erro interno ao consultar API externa' });
