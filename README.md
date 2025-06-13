@@ -100,7 +100,7 @@ Em breve...
 
 ## ☁️ Deploy
 
-Em breve: será feito o deploy na [Render](https://render.com) ou [Railway](https://railway.app).
+https://proxy-coingecko.onrender.com
 
 ---
 
