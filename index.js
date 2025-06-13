@@ -10,6 +10,10 @@ app.use('/price', priceRouter);
 app.use('/status', statusRouter);
 app.use('/history', historyRouter);
 
+app.get('/', (req, res) => {
+  res.json({ message: 'CoinGecko Proxy API is online ✅' });
+});
+
 app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`);
 });
