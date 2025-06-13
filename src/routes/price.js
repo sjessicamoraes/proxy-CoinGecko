@@ -5,6 +5,8 @@ const router = express.Router();
 const history = [];
 const cache = new Map();
 
+const allowedCoins = ['bitcoin', 'ethereum', 'dogecoin', 'litecoin', 'solana'];
+
 router.get('/:coin', async (req, res) => {
   const { coin } = req.params;
 
@@ -16,7 +18,7 @@ router.get('/:coin', async (req, res) => {
       console.log('⚡ Retornando do cache');
 
       history.push({
-       coin,
+        coin,
         price_usd: cached.price_usd,
         timestamp: new Date().toISOString(),
         cached: true
@@ -33,6 +35,10 @@ router.get('/:coin', async (req, res) => {
         price_usd: cached.price_usd,
         cached: true
       });
+    }
+
+    if (!allowedCoins.includes(coin.toLowerCase())) {
+      return res.status(400).json({ error: `Moeda "${coin}" não é suportada.` });
     }
 
     const response = await fetch(
